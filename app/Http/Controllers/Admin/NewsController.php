@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\News;
+use Carbon\Carbon;
+use App\History;
 
 class NewsController extends Controller
 {
@@ -74,7 +76,11 @@ class NewsController extends Controller
 
       // 該当するデータを上書きして保存する
       $news->fill($news_form)->save();
-
+      $history = new History();
+      $history->news_id = $news->id;
+      $history->edited_at = Carbon::now();
+      $history->save();
+      
       return redirect('admin/news');
   }
      public function delete(Request $request)
